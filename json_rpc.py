@@ -14,8 +14,7 @@ class JsonRpc:
         #config.jsonの読み込み
         f = open('config/config.json', 'r', encoding="utf-8")
         config = json.load(f)
-        self._executions = deque(maxlen=300)
-        self._spotExecutions = deque(maxlen=300)
+        self._executions = deque(maxlen=1000)
         # self.key = config["key"]
         # self.secret = config["secret"]
 
@@ -76,8 +75,13 @@ class JsonRpc:
             logging.info("{} {}".format(i, len(self.executions)))
             logging.info("{} {}".format(i, self.executions[-1]))
             time.sleep(2)
+        
+        exes = list(self.executions)
+        highRange = max(exes, key=lambda x:x.get("price"))
+        lowRange = min(exes, key=lambda x:x.get("price"))
 
-        logging.info(self.executions)
+        logging.info("max: {}".format(highRange))
+        logging.info("min: {}".format(lowRange))
 
 if __name__ == '__main__':
     #logging設定
